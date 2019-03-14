@@ -1,4 +1,8 @@
 import animals.Cat;
+import animals.Course;
+import animals.Human;
+import animals.Team;
+import valuestype.ActType;
 import valuestype.Gender;
 
 /**
@@ -10,18 +14,14 @@ public class ProgramLauncher
   public static void main(String[] args)
   {
 
-    Cat maleCat = new Cat(2, "Vasya", Gender.MALE);
-    Cat femaleCat = new Cat(3, "Katya", Gender.FEMALE);
+    Human koteev = new Human(25, "Koteev", Gender.MALE);
+    Human dareeva = new Human(23, "Dareeva", Gender.FEMALE);
+    Human panin = new Human(24, "Panin", Gender.MALE);
+    Human usov = new Human(22, "Usov", Gender.MALE);
 
-
-    //RUN
-    System.out.println(maleCat.getName() + " : " + maleCat.run());
-    System.out.println(femaleCat.getName() + " : " + femaleCat.run());
-
-    //JUMP
-    System.out.println(maleCat.getName() + " : " + maleCat.jump());
-    System.out.println(femaleCat.getName() + " : " + femaleCat.jump());
-
-
+    Team teamZero = new Team(koteev, dareeva, panin, usov);
+    Course course = new Course(new ActType[]{ActType.JUMP, ActType.RUN, ActType.SWIM, ActType.RUN});
+    course.doIt(teamZero);
+    teamZero.showResults();
   }
 }
