@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 public class App {
 
@@ -6,10 +7,11 @@ public class App {
         EchoServer myServer = new EchoServer();
         EchoClient myClient = new EchoClient();
 
-        myClient.sendMessage("сообщение1");
-        myClient.sendMessage("сообщение2");
-        myClient.sendMessage("сообщение3");
-        myClient.sendMessage("/end");
+        Scanner sc = new Scanner(System.in);
 
+        while (true) {
+            String message = sc.nextLine();
+            myClient.sendMessage(message); // команда для завершения "/end"
+        }
     }
 }
