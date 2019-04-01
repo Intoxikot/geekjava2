@@ -9,7 +9,7 @@ public class App {
 
         Scanner sc = new Scanner(System.in);
 
-        while (true) {
+        while (myClient.isRunning()) {
             String message = sc.nextLine();
             myClient.sendMessage(message); // команда для завершения "/end"
         }

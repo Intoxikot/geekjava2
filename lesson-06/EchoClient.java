@@ -10,9 +10,11 @@ public class EchoClient {
         private Socket socket;
         private DataInputStream in;
         private DataOutputStream out;
+        private boolean work = false;
 
         public EchoClient() {
             try {
+                work = true;
                 openConnection();
             } catch (IOException e) {
                 System.out.println("Ошибка соединения");
@@ -30,11 +32,11 @@ public class EchoClient {
                         while (true) {
                             String strFromServer = in.readUTF();
                             if (strFromServer.equals("/end")) { // Команда, принимаемая от сервера
-                                out.writeUTF("Клиент завершил работу");
-                                // System.out.println("Клиент завершил работу");
+                                out.writeUTF("Клиент завершил работу"); // Если сервер запущен, он получит сообщение о завершении работы клиента
+                                closeConnection(); // отключить клиент
                                 break;
                             }
-                            System.out.println("Клиент: " + strFromServer);
+                            System.out.println(strFromServer);
                         }
                     } catch(IOException e) {
                         System.out.println("Ошибка работы клиента");
@@ -48,6 +50,7 @@ public class EchoClient {
                 in.close();
                 out.close();
                 socket.close();
+                work = false;
                 System.out.println("Клиент завершил работу");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -63,5 +66,9 @@ public class EchoClient {
             } catch (IOException e) {
                 System.out.println("Ошибка отправки сообщения");
             }
+        }
+
+        public boolean isRunning() {
+            return work;
         }
 }

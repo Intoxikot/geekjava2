@@ -31,6 +31,7 @@ public class EchoServer {
                 String str = in.readUTF();
                 if (str.equals("/end")) { // Команда, принимаемая от клиента
                     out.writeUTF("Сервер завершил работу");
+                    out.writeUTF("/end"); // Сервер в свою очередь при отключении уведомляет клиент и направляет встречную команду
                     break;
                 }
                 out.writeUTF("Сервер: " + str);
