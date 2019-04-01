@@ -11,6 +11,7 @@ public class EchoClient {
         private DataInputStream in;
         private DataOutputStream out;
         private boolean work = false;
+        private Thread threadClient = null;
 
         public EchoClient() {
             try {
@@ -25,7 +26,7 @@ public class EchoClient {
             socket = new Socket(SERVER_ADR, SERVER_PORT);
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
-            new Thread(new Runnable() {
+            threadClient = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -33,6 +34,7 @@ public class EchoClient {
                             String strFromServer = in.readUTF();
                             if (strFromServer.equals("/end")) { // Команда, принимаемая от сервера
                                 out.writeUTF("Клиент завершил работу"); // Если сервер запущен, он получит сообщение о завершении работы клиента
+                                System.out.println("Клиент завершил работу");
                                 closeConnection(); // отключить клиент
                                 break;
                             }
@@ -42,7 +44,8 @@ public class EchoClient {
                         System.out.println("Ошибка работы клиента");
                     }
                 }
-            }).start();
+            });
+            threadClient.start();
         }
 
         public void closeConnection() {
@@ -51,13 +54,18 @@ public class EchoClient {
                 out.close();
                 socket.close();
                 work = false;
-                System.out.println("Клиент завершил работу");
+                // threadClient.interrupt();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         public void sendMessage(String msg) {
+            if (!isRunning()) {
+                System.out.println("Клиент не запущен");
+                return;
+            }
+
             if (msg.trim().isEmpty())
                 return;
 

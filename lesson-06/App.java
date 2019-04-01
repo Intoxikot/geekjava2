@@ -13,5 +13,6 @@ public class App {
             String message = sc.nextLine();
             myClient.sendMessage(message); // команда для завершения "/end"
         }
+        // myServer.terminateServer();
     }
 }

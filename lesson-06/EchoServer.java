@@ -9,14 +9,18 @@ public class EchoServer {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private boolean work = false;
+    private Thread threadServer;
 
     public EchoServer() {
-        new Thread(new Runnable() {
+        threadServer = new Thread(new Runnable() {
             @Override
             public void run() {
+                work = true;
                 runServer();
             }
-        }).start();
+        });
+        threadServer.start();
     }
 
     private void runServer() {
@@ -30,8 +34,9 @@ public class EchoServer {
             while (true) {
                 String str = in.readUTF();
                 if (str.equals("/end")) { // Команда, принимаемая от клиента
-                    out.writeUTF("Сервер завершил работу");
+                    System.out.println("Сервер завершил работу");
                     out.writeUTF("/end"); // Сервер в свою очередь при отключении уведомляет клиент и направляет встречную команду
+                    terminateServer();
                     break;
                 }
                 out.writeUTF("Сервер: " + str);
@@ -40,5 +45,20 @@ public class EchoServer {
         } catch (IOException e) {
             System.out.println("Сервер вышел из строя");
         }
+    }
+
+    public void terminateServer() {
+        try {
+            in.close();
+            out.close();
+            work = false;
+            // threadServer.interrupt();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isRunning() {
+        return work;
     }
 }
